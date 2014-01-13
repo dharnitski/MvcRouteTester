@@ -106,6 +106,20 @@ namespace MvcRouteTester.Test.WebRoute
 				To<FromBodyController>(c => c.Post(123, postData));
 		}
 
+        [Test]
+        public void TestFluentMapWithFormUrlBodyPrivateSetter()
+        {
+            var postData = new PostDataModelPrivateSetter
+            {
+                Name = "Fred Bloggers",
+                Number = 42
+            };
+            const string PostBody = "Name=Fred+Bloggers&Number=42";
+
+            routes.ShouldMap("/frombody/post/123").WithFormUrlBody(PostBody).
+                To<FromBodyController>(c => c.Post(123, postData));
+        }
+
 		[Test]
 		public void MismatchFluentMapWithFormUrlBodyFails()
 		{

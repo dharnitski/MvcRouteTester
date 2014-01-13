@@ -74,6 +74,29 @@ namespace MvcRouteTester.Common
 			return result;
 		}
 
+        public IList<RouteValue> PropertiesListWithSetter(object dataObject, RouteValueOrigin origin = RouteValueOrigin.Unknown)
+        {
+            var result = new List<RouteValue>();
+            if (dataObject == null)
+            {
+                return result;
+            }
+
+            var type = dataObject.GetType();
+            var objectProperties = GetPublicObjectProperties(type);
+
+            foreach (PropertyInfo objectProperty in objectProperties)
+            {
+                if (IsSimpleType(objectProperty.PropertyType) && (objectProperty.CanWrite || objectProperty.MemberType == MemberTypes.Field))
+                {
+                    var value = GetPropertyValue(dataObject, objectProperty);
+                    result.Add(new RouteValue(objectProperty.Name, value, origin));
+                }
+            }
+
+            return result;
+        }
+
 		private object GetPropertyValue(object dataObject, PropertyInfo objectProperty)
 		{
 			var getMethod = objectProperty.GetGetMethod();
@@ -104,7 +127,7 @@ namespace MvcRouteTester.Common
 		private static IEnumerable<PropertyInfo> GetPublicObjectProperties(Type type)
 		{
 			return type.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
-				.Where(p => ! IgnoreAttributes.PropertyIsIgnored(p))
+                .Where(p => !IgnoreAttributes.PropertyIsIgnored(p))
 				.ToList();
 		}
 	}

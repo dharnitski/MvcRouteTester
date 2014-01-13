@@ -146,7 +146,7 @@ namespace MvcRouteTester.Fluent
 					}
 					else
 					{
-						var objectFieldValues = propertyReader.PropertiesList(expectedValue, routeValueOrigin)
+						var objectFieldValues = propertyReader.PropertiesListWithSetter(expectedValue, routeValueOrigin)
 							.Where(x => x.Value != null);
 						values.AddRange(objectFieldValues);
 					}

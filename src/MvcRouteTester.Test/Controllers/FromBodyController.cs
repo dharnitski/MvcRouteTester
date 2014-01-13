@@ -8,6 +8,11 @@ namespace MvcRouteTester.Test.Controllers
 		public int Number { get; set; }
 	}
 
+    public class PostDataModelPrivateSetter: PostDataModel
+    {
+        public string FormattedName { get { return Name; } }
+    }
+
 	public class FromBodyController : Controller
 	{
 		public ActionResult Post(int id, PostDataModel data)
